@@ -15,19 +15,20 @@ router.get('/notes', (req, res, next) => {
   let projection = {};
   let sort = 'created'; // default sorting
 
-  // if (searchTerm) {
-  //   filter.$text = { $search: searchTerm };
-  //   projection.score = { $meta: 'textScore' };
-  //   sort = projection;
-  // }
+  if (searchTerm) {
+    filter.$text = { $search: searchTerm };
+    projection.score = { $meta: 'textScore' };
+    sort = projection;
+  }
 
-  Note.find( {'title' : 'Lady Gaga....'} , projection)
-    .select('title content created')
+  Note.find(filter, projection)
     .sort(sort)
     .then(results => {
       res.json(results);
     })
-    .catch(next);
+    .catch(err => {
+      next(err);
+    });
 });
 
 /* ========== GET/READ A SINGLE ITEM ========== */
@@ -41,7 +42,6 @@ router.get('/notes/:id', (req, res, next) => {
   }
 
   Note.findById(id)
-    .select('id title content')
     .then(result => {
       if (result) {
         res.json(result);
@@ -94,7 +94,6 @@ router.put('/notes/:id', (req, res, next) => {
   const options = { new: true };
 
   Note.findByIdAndUpdate(id, updateItem, options)
-    .select('id title content')
     .then(result => {
       if (result) {
         res.json(result);
