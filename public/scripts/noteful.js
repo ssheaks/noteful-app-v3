@@ -1,4 +1,4 @@
-/* global $ store api moment*/
+/* global $ store api moment */
 'use strict';
 
 const noteful = (function () {
@@ -45,8 +45,6 @@ const noteful = (function () {
           </div>
       </li>`);
     return listItems.join('');
-
-
   }
 
   function generateFolderList(list, currQuery) {
