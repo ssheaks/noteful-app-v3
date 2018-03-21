@@ -49,7 +49,9 @@ router.get('/notes/:id', (req, res, next) => {
         next();
       }
     })
-    .catch(next);
+    .catch(err => {
+      next(err);
+    });
 });
 
 /* ========== POST/CREATE AN ITEM ========== */
@@ -69,7 +71,9 @@ router.post('/notes', (req, res, next) => {
     .then(result => {
       res.location(`${req.originalUrl}/${result.id}`).status(201).json(result);
     })
-    .catch(next);
+    .catch(err => {
+      next(err);
+    });
 });
 
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
@@ -101,7 +105,9 @@ router.put('/notes/:id', (req, res, next) => {
         next();
       }
     })
-    .catch(next);
+    .catch(err => {
+      next(err);
+    });
 });
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
@@ -109,14 +115,12 @@ router.delete('/notes/:id', (req, res, next) => {
   const { id } = req.params;
 
   Note.findByIdAndRemove(id)
-    .then(count => {
-      if (count) {
-        res.status(204).end();
-      } else {
-        next();
-      }
+    .then(() => {
+      res.status(204).end();
     })
-    .catch(next);
+    .catch(err => {
+      next(err);
+    });
 });
 
 module.exports = router;
